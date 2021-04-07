@@ -91,9 +91,11 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [("127.0.0.1", 6379)],
+            'capacity': 30000
         },
     },
 }
+ASGI_THREADS = 10
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -139,4 +141,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
+}
+
+TORTOISE_INIT = {
+    "db_url": "sqlite://db.sqlite3.tortoise",
+    "modules" : {
+        "models": ["sockets.tortoise_models"]
+     }
 }
