@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'user',
     'channels',
     'sockets',
     'rest_framework',
@@ -43,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
 ]
+
+AUTH_USER_MODEL = 'user.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,9 +146,41 @@ REST_FRAMEWORK = {
     ),
 }
 
+# TORTOISE_INIT = {
+#     "db_url": "sqlite://db.sqlite3.tortoise",
+#     "modules" : {
+#         "models": ["sockets.tortoise_models"]
+#      }
+# }
+# TORTOISE_INIT = {
+#     "db_url": "postgres://localhost:5432/geo4",
+#     "modules" : {
+#         "models": ["sockets.tortoise_models"]
+#      }
+# }
+
 TORTOISE_INIT = {
-    "db_url": "sqlite://db.sqlite3.tortoise",
-    "modules" : {
-        "models": ["sockets.tortoise_models"]
-     }
-}
+        "connections": {
+            "default": {
+                "engine": "tortoise.backends.asyncpg",
+                "credentials": {
+                    "database": "data10",
+                    "host": "127.0.0.1",
+                    "password": "password",
+                    "port": 5432,
+                    "user": "myprojectuser",
+                    "max_size":200,
+                    "min_size":1,
+                    "max_inactive_connection_lifetime":1.0,
+                    # "ssl": ctx  # 
+                },
+                
+            },
+        },
+        "apps": {
+            "models": {
+                "models": ["sockets.tortoise_models"],
+                "default_connection": "default",
+            }
+        },
+    }

@@ -6,14 +6,15 @@ from asgiref.sync import sync_to_async
 from tortoise import Tortoise
 from django.conf import settings
 from .tortoise_models import Order,Payment
+from tortoise.query_utils import Q
 
 def index(request):
     return render(request, 'index.html')
 
 
 async def order(request, order_id):
-
-    await Tortoise.init(**settings.TORTOISE_INIT)
+    # await Tortoise.init(**settings.TORTOISE_INIT)
+    await Tortoise.init(config = settings.TORTOISE_INIT)
     order = await Order.all().values()
     await Tortoise.close_connections()
     return await sync_to_async(JsonResponse)(order, safe=False)

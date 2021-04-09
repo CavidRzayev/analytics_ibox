@@ -2,11 +2,16 @@ from channels.generic.websocket import AsyncWebsocketConsumer,AsyncJsonWebsocket
 import json
 from django.contrib.auth.models import User
 from channels.db import database_sync_to_async
-from .services import order_service,payment_services
+from .core.order import OrderProcessing
+from .core.payment import PaymentProcessing
 
 class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
     
+    payment = PaymentProcessing()
+    order = OrderProcessing()
+
     async def connect(self):
+        
         await self.accept()
     
     async def echo_message(self, event):
@@ -27,21 +32,13 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
     
     async def parse_data(self,data):
         data_type = data['type'].split('_')
-        if "order" in data_type[0]:
-            await order_service(**data)
+        if "checkout" in data_type[1]:
+            await self.order.order_service(**data)
         if "payment" in data_type[1]:
-            await payment_services(**data)            
+            await self.payment.payment_services(**data)            
         await self.echo_message(data)
        
-    async def order_view(self, event):
-        type = event['type']
-        order_id = event['data'][0]['order_id']
-        status = event['data'][0]['status']
-        await self.send_json({
-            'type': type,
-            'order_id': username,
-            'status': status,
-        })
+    
     
 
         
