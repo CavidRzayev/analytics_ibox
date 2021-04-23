@@ -8,13 +8,10 @@ from django.conf import settings
 from .tortoise_models import Order,Payment
 from tortoise.query_utils import Q
 
-def index(request):
-    return render(request, 'index.html')
 
-
-async def order(request, order_id):
-    # await Tortoise.init(**settings.TORTOISE_INIT)
-    await Tortoise.init(config = settings.TORTOISE_INIT)
-    order = await Order.all().values()
+async def order(request):
+    # await Tortoise.init(**settings.)
+    await Tortoise.init(**settings.TORTOISE_INIT)
+    order = await Order.all()
     await Tortoise.close_connections()
-    return await sync_to_async(JsonResponse)(order, safe=False)
+    return render (request,'order.html',{'order':order})

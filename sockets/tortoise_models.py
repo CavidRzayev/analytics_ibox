@@ -27,7 +27,7 @@ class Order(DefaultModel):
     user_id = fields.IntField(null=True)
     merchant_id = fields.IntField(null=True)
     courier_id = fields.IntField(null=True)
-    point = fields.IntField(null=True)
+    point = fields.IntField(null=True,default=1)
 
     class Meta:
         table = 'socket_order'
@@ -48,13 +48,15 @@ class Payment(DefaultModel):
 async def signal_pre_save(sender, instance: Payment, using_db, update_fields) -> None:
     channel_layer = get_channel_layer()
     if instance.status == 'Paid':
-        order = await Order.update_or_create(status = "Success",
+        get_order = await Order.get(id=instance.order_id)
+       
+        order = await Order.update_or_create(status = "success",
         status_message=instance.status_message,
         description=instance.description,
         type=instance.type,
-        order_id=instance.order_id,
-        payment_id=instance.id)
-        
+        order_id=get_order.order_id,
+        payment_id=instance.id,
+        point=2)
         await channel_layer.group_send(
             "managers",
             {'type': 'userflow.payment',

@@ -9,7 +9,7 @@ class OrderProcessing:
         super().__init__(**kwargs)
 
     async def order_service(self,*args, **kwargs):
-        await Tortoise.init(config=settings.TORTOISE_INIT)
+        await Tortoise.init(**settings.TORTOISE_INIT)
         await Tortoise.generate_schemas()
         pars_data = await parse_event(**kwargs)
         pars_data['type'] = kwargs['type']
@@ -17,6 +17,7 @@ class OrderProcessing:
         if len(order) > 0:
             for update_order in order:
                 obj = await update_order.update_or_create(**pars_data)
+              
         else:
             data = await Order.get_or_create(**pars_data)
         await Tortoise.close_connections()

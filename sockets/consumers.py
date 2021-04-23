@@ -32,8 +32,10 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
     
     async def parse_data(self,data):
         data_type = data['type'].split('_')
-        if "checkout" in data_type[1]:
+        print(data)
+        if "checkout" or "draft" in data_type[1]:
             await self.order.order_service(**data)
+       
         if "payment" in data_type[1]:
             await self.payment.payment_services(**data)            
         await self.echo_message(data)

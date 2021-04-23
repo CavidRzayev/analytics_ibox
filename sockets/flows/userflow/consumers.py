@@ -47,7 +47,7 @@ class UserFlowConsumers(AsyncJsonWebsocketConsumer):
 
 
     async def userflow_payment(self,event):
-        await Tortoise.init(config = settings.TORTOISE_INIT)
+        await Tortoise.init(**settings.TORTOISE_INIT)
         order = await Order.filter(order_id=event['data']).exclude(payment_id=None).order_by("-id").first().values()
         a = json.dumps(order,
         sort_keys=True,
