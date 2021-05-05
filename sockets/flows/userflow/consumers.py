@@ -13,7 +13,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 async def get_order(data):
     Tortoise.init(config = settings.TORTOISE_INIT)
     order = await Order.filter(order_id=data['event'])
-    print(order)
     await Tortoise.close_connections()
 
 
@@ -25,9 +24,12 @@ class UserFlowConsumers(AsyncJsonWebsocketConsumer):
         if self.scope['user'].is_manager:
             self.group_name = "managers"
             await self.channel_layer.group_add(
-            self.group_name,
-            self.channel_name)
+                self.group_name,
+                self.channel_name)
         await self.accept()
+
+    async def new_create_echo_message(self, event):
+        await self.send_json(event)
 
 
     async def receive_json(self, content):
@@ -49,11 +51,12 @@ class UserFlowConsumers(AsyncJsonWebsocketConsumer):
     async def userflow_payment(self,event):
         await Tortoise.init(**settings.TORTOISE_INIT)
         order = await Order.filter(order_id=event['data']).exclude(payment_id=None).order_by("-id").first().values()
+        
         a = json.dumps(order,
         sort_keys=True,
         indent=1,
         cls=DjangoJSONEncoder)
-        print(a)
+       
         
         await self.send_json(json.loads(a))
         

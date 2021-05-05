@@ -28,6 +28,9 @@ class Order(DefaultModel):
     merchant_id = fields.IntField(null=True)
     courier_id = fields.IntField(null=True)
     point = fields.IntField(null=True,default=1)
+    payment_status = fields.IntField(null=True)
+    payment_method = fields.IntField(null=True)
+    is_active = fields.BooleanField(default=True)
 
     class Meta:
         table = 'socket_order'
@@ -36,7 +39,20 @@ class Order(DefaultModel):
     def __str__(self):
         return str(self.id)
 
-
+    async def save(self,force_create,*args, **kwargs):
+        # if force_create is True:
+        if self.type == 'order_draft':
+             self.point = 1
+        elif self.type == "order_checkout":
+            self.point = 2
+        elif self.type == "order_payment":
+            self.point = 3
+        elif self.type == "order_processing":
+            self.point = 4
+        elif self.type == "order_done":
+            self.point = 5
+        await super().save(*args, **kwargs)
+        
 class Payment(DefaultModel):
     order = fields.ForeignKeyField('models.Order', related_name='order_payments')
 
@@ -44,21 +60,22 @@ class Payment(DefaultModel):
         table = 'socket_payment'
     
 
-@pre_save(Payment)
-async def signal_pre_save(sender, instance: Payment, using_db, update_fields) -> None:
-    channel_layer = get_channel_layer()
-    if instance.status == 'Paid':
-        get_order = await Order.get(id=instance.order_id)
-       
-        order = await Order.update_or_create(status = "success",
-        status_message=instance.status_message,
-        description=instance.description,
-        type=instance.type,
-        order_id=get_order.order_id,
-        payment_id=instance.id,
-        point=2)
-        await channel_layer.group_send(
-            "managers",
-            {'type': 'userflow.payment',
-            'data': instance.order_id,
-            })
+# @pre_save(Payment)
+# async def signal_pre_save(sender, instance: Payment, using_db, update_fields) -> None:
+#     channel_layer = get_channel_layer()
+#     if instance.status == 'Paid':
+#         get_order = await Order.get(id=instance.order_id)
+#         print(get_order.id)
+#         order = await Order.update_or_create(status = "success",
+#         status_message=instance.status_message,
+#         description=instance.description,
+#         type=instance.type,
+#         order_id=get_order.order_id,
+#         payment_id=instance.id,
+#         point=2)
+#         print('data', instance.order_id)
+#         await channel_layer.group_send(
+#             "managers",
+#             {'type': 'userflow.payment',
+#             'data': get_order.order_id,
+#             })

@@ -181,112 +181,297 @@
             </div>
             <!-- End Topbar -->
             <!-- Start Breadcrumbbar -->
-            <div class="breadcrumbbar">
-                <div class="row align-items-center">
-                    <div class="col-md-8 col-lg-8">
-                        <h4 class="page-title">Order Monitoring</h4>
-                        <div class="breadcrumb-list">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Orders</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <!-- End Breadcrumbbar -->
             <!-- Start Contentbar -->
-           
-  <div class="contentbar">
-
-  
-
-
-                <!-- Start row -->
-                <div class="row">
-                     <!-- Start col -->
-                    <div class="col-lg-12">
-                        {% for x in order %}
-                        <div class="card crm-project-box m-b-30">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-12 col-lg-6 col-xl-1">
-                                        <p class="piety-data-attributes text-center my-3">
-                                            <span data-peity='{ "fill": ["#506fe4", "#f2f3f7"],  "innerRadius": 22, "radius": 28 }'>{{x.point}}/5</span>
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-lg-6 col-xl-5">
-                                        <h5>Order #{{x.id}} {{x.is_active}}</h5>
-                                       <a href="{% url "order_detail" x.order_id %}"> <p class="font-14">Created at : {{x.created}} | User ID : {{x.user_id}} | Merchant ID : {{x.merchant_id}} | Courier ID: {{x.courier_id}} | Payment ID: {{x.payment_id}} | Order ID: {{x.order_id}}</p> </a>
-                                    </div>
-                                    <div class="col-12 col-lg-12 col-xl-6">
-                                        <div class="progress" style="height: 22px;">
-                                        {% if x.type == "order_done" and x.status == 'success'  %}
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        {% elif x.type == "order_processing" and x.status == 'success'  %}
-                                                     <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    
-                                        
-                                        {% elif x.type == "order_payment" and x.status == 'success'  %}
-                                            <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        {% elif x.type == "order_checkout" and x.status == 'success'  %}
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        {% elif x.type == "order_draft" and x.status == 'success'  %}
-                                                <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-
-                                        {% else %}
-                                            <div class="progress-bar bg-danger border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        
-                                        {% endif %}
-                                            
-                                        </div>
-                                    </div>
-                                   
-                                </div>
-                            </div>
-                        </div>
-                      {% endfor %}
-                      
-
-                    </div>
-                     <!-- End col -->
-                </div>
-                <!-- End row -->
+        <div class="breadcrumbbar">
+          <div class="row align-items-center">
+            <div class="col-md-8 col-lg-8">
+              <h4 class="page-title">Order Monitoring</h4>
+              <div class="breadcrumb-list">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                  <li class="breadcrumb-item"><a href="#">Orders</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Order</li>
+                </ol>
+              </div>
             </div>
-            <!-- End Contentbar -->
-            <!-- Start Footerbar -->
-            <div class="footerbar">
-                <footer class="footer">
-                    <p class="mb-0">© 2021 iBox</p>
-                </footer>
-            </div>
-            <!-- End Footerbar -->
+          </div>
         </div>
-        <!-- End Rightbar -->
+        <!-- End Breadcrumbbar -->
+        <!-- Start Contentbar -->
+        <div class="contentbar">
+          <!-- Start row -->
+          <div class="row">
+            <!-- Start col -->
+            <div class="col-lg-12">
+
+              <div class="text-center">
+                <h3>Order ID: {{order.order_id}}</h3>
+              </div>
+
+
+              <!-- User Flow -->
+              <div class="card crm-project-box m-b-30">
+                <div class="card-body">
+
+                  <h5>
+                    User Flow
+                    <span class="pull-right">User ID: {{order.user_id}}</span>
+                  </h5>
+
+                  <div class="row align-items-center">
+                    <div class="col-12 col-lg-12 col-xl-12">
+                      <div class="progress" style="height:100px">
+                        <div
+                        data-container="body"
+                        data-toggle="popover"
+                        data-placement="bottom"
+                        title=""
+                        data-content="{{order.status_message}}."
+                        data-original-title="{{order.status}}"
+                        {% if order %} class="progress-bar bg-success border-right" {%else%} class="progress-bar bg-secondary border-right"{%endif%}
+                        style="width: 25%">
+                        <div>DRAFT</div>
+                        <div>{{order.created}}</div>
+                      </div>
+                      <div
+                      data-container="body"
+                      data-toggle="popover"
+                      data-placement="bottom"
+                      title=""
+                      data-content="{{order_checkout.status_message}}."
+                      data-original-title="{{order_checkout.status|default:"Process is valid"}}"
+                      {% if order_checkout %} class="progress-bar bg-success border-right" {%else%} class="progress-bar bg-secondary border-right"{%endif%}
+                      style="width: 25%">
+                      <div>CHECKOUT</div>
+                      <div>{{order_checkout.created}}</div>
+                    </div>
+                    <div
+                    data-container="body"
+                    data-toggle="popover"
+                    data-placement="bottom"
+                    title=""
+                    data-content="{{order_payment.status_message}}."
+                    data-original-title="{{order_payment.status|default:"Process is valid"}}"
+                    {% if order_payment%}{% if order_payment.status == "success" %} class="progress-bar bg-success border-right" {%elif order_payment.status == "error"%}class="progress-bar bg-danger border-right" {%endif%}{%else%} class="progress-bar bg-secondary border-right"={%endif%}
+                    style="width: 25%">
+                    <div>PAYMENT</div>
+                    <div>{{order_payment.created}}</div>
+                  </div>
+                  <div
+                  data-container="body"
+                  data-toggle="popover"
+                  data-placement="bottom"
+                  title=""
+                  data-content="{{order_processing.status_message}}."
+                  data-original-title="{{order_processing.status|default:"Process is valid"}}"
+                  {% if order_processing%}{% if order_processing.status == "success" %} class="progress-bar bg-success border-right" {%elif order_processing.status == "error"%}class="progress-bar bg-danger border-right" {%endif%}{%else%} class="progress-bar bg-secondary border-right"={%endif%}
+                  style="width: 25%">
+                  <div>PROCESSING</div>
+                  <div>{{order_processing.created}}</div>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Flow -->
+      <div class="card crm-project-box m-b-30">
+        <div class="card-body">
+
+          <h5>
+            Payment Flow
+            <span class="pull-right">Payment ID: {{order_payment.payment_id|default:"None"}}</span>
+          </h5>
+
+          <div class="row align-items-center">
+            <div class="col-12 col-lg-12 col-xl-12">
+              <div class="progress" style="height:100px">
+                <div
+                data-container="body"
+                data-toggle="popover"
+                data-placement="bottom"
+                title=""
+                data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                data-original-title="SUCCESS"
+                class="progress-bar bg-danger border-right"
+                style="width: 33.3%">
+                <div>PURCHASE</div>
+                <div>2021-03-28 18:53</div>
+              </div>
+              <div
+              data-container="body"
+              data-toggle="popover"
+              data-placement="bottom"
+              title=""
+              data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+              data-original-title="SUCCESS"
+              class="progress-bar bg-success border-right"
+              style="width: 33.3%">
+              <div>BILLING PROCESSING</div>
+              <div>2021-03-28 18:53</div>
+            </div>
+            <div
+            data-container="body"
+            data-toggle="popover"
+            data-placement="bottom"
+            title=""
+            data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+            data-original-title="SUCCESS"
+            class="progress-bar bg-danger border-right"
+            style="width: 33.3%">
+            <div>WITHDRAWAL</div>
+            <div>2021-03-28 18:53</div>
+          </div>
+        </div>
+      </div>
     </div>
-  
+  </div>
+</div>
+
+<!-- Merchant Flow -->
+<div class="card crm-project-box m-b-30">
+  <div class="card-body">
+
+    <h5>
+      Merchant Flow
+      <span class="pull-right">Merchant ID: 332</span>
+    </h5>
+
+    <div class="row align-items-center">
+      <div class="col-12 col-lg-12 col-xl-12">
+        <div class="progress" style="height:100px">
+          <div
+          data-container="body"
+          data-toggle="popover"
+          data-placement="bottom"
+          title=""
+          data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+          data-original-title="SUCCESS"
+          class="progress-bar bg-danger border-right"
+          style="width: 25%">
+          <div>PENDING</div>
+          <div>2021-03-28 18:53</div>
+        </div>
+        <div
+        data-container="body"
+        data-toggle="popover"
+        data-placement="bottom"
+        title=""
+        data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+        data-original-title="SUCCESS"
+        class="progress-bar bg-danger border-right"
+        style="width: 25%">
+        <div>EVALUATE</div>
+        <div>2021-03-28 18:53</div>
+      </div>
+      <div
+      data-container="body"
+      data-toggle="popover"
+      data-placement="bottom"
+      title=""
+      data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+      data-original-title="SUCCESS"
+      class="progress-bar bg-danger border-right"
+      style="width: 25%">
+      <div>READY</div>
+      <div>2021-03-28 18:53</div>
+    </div>
+    <div
+    data-container="body"
+    data-toggle="popover"
+    data-placement="bottom"
+    title=""
+    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+    data-original-title="SUCCESS"
+    class="progress-bar bg-success border-right"
+    style="width: 25%">
+    <div>COURIER ASSIGN</div>
+    <div>2021-03-28 18:53</div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Courier Flow -->
+<div class="card crm-project-box m-b-30">
+  <div class="card-body">
+
+    <h5>
+      Courier Flow
+      <span class="pull-right">Courier ID: 332</span>
+    </h5>
+
+    <div class="row align-items-center">
+      <div class="col-12 col-lg-12 col-xl-12">
+        <div class="progress" style="height:100px">
+          <div
+          data-container="body"
+          data-toggle="popover"
+          data-placement="bottom"
+          title=""
+          data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+          data-original-title="SUCCESS"
+          class="progress-bar bg-warning border-right"
+          style="width: 33.3%">
+          <div>LOCATION</div>
+          <div>2021-03-28 18:53</div>
+        </div>
+        <div
+        data-container="body"
+        data-toggle="popover"
+        data-placement="bottom"
+        title=""
+        data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+        data-original-title="SUCCESS"
+        class="progress-bar bg-warning border-right"
+        style="width: 33.3%">
+        <div>TAKE ORDER</div>
+        <div>2021-03-28 18:53</div>
+      </div>
+      <div
+      data-container="body"
+      data-toggle="popover"
+      data-placement="bottom"
+      title=""
+      data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+      data-original-title="SUCCESS"
+      class="progress-bar bg-success border-right"
+      style="width: 33.3%">
+      <div>DELIVERED</div>
+      <div>2021-03-28 18:53</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
 
 
-  <script>
+</div>
+<!-- End col -->
+</div>
+<!-- End row -->
+</div>
+<!-- End Contentbar -->
+<!-- Start Footerbar -->
+<div class="footerbar">
+  <footer class="footer">
+    <p class="mb-0">© 2021 iBox</p>
+  </footer>
+</div>
+<!-- End Footerbar -->
+</div>
+<!-- End Rightbar -->
+</div>
+<!-- End Containerbar -->
+<!-- Start js -->
+<script>
 
         const chatSocket = new WebSocket(
          'ws://'
@@ -297,6 +482,7 @@
 
        
    </script>
+
 
 
     <script src="{% static 'assets/js/jquery.min.js' %}"></script>
@@ -319,5 +505,3 @@
     <!-- End js -->
 </body>
 </html>
-
-  

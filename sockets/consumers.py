@@ -32,10 +32,18 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
     
     async def parse_data(self,data):
         data_type = data['type'].split('_')
-        print(data)
-        if "checkout" or "draft" in data_type[1]:
-            await self.order.order_service(**data)
-       
+        
+        if "checkout" or 'draft' in data_type[1]:
+            send = await self.order.order_service(**data)
+            if send[1] == True:
+                new_data = await send[0].get_or_none(id=send[0].id).values('order_id','id','user_id','type','status','payment_status','payment_id','description','merchant_id','point')
+                await self.channel_layer.group_send(
+                    'managers',
+                    {
+                        'type': 'new.create.echo.message',
+                        'message': new_data
+                    }
+                )
         if "payment" in data_type[1]:
             await self.payment.payment_services(**data)            
         await self.echo_message(data)
