@@ -205,62 +205,12 @@
                 <!-- Start row -->
                 <div class="row">
                      <!-- Start col -->
-                    <div class="col-lg-12">
-                        {% for x in order %}
+                    <div class="log col-lg-12">
+                        {% for x in obj %}
                         <div class="card crm-project-box m-b-30">
                             <div class="card-body">
                                 <div class="row align-items-center">
-                                    <div class="col-12 col-lg-6 col-xl-1">
-                                        <p class="piety-data-attributes text-center my-3">
-                                            <span data-peity='{ "fill": ["#506fe4", "#f2f3f7"],  "innerRadius": 22, "radius": 28 }'>{{x.point}}/5</span>
-                                        </p>
-                                    </div>
-                                    <div class="col-12 col-lg-6 col-xl-5">
-                                        <h5>Order #{{x.order_id}} {{x.is_active}}</h5>
-                                       <a href="{% url "order_detail" x.order_id %}"> <p class="font-14">Created at : {{x.created}} | User ID : {{x.user_id}} | Merchant ID : {{x.merchant_id}} | Courier ID: {{x.courier_id|default:"None"}} | Payment ID: {{x.payment_id}} </p> </a>
-                                    </div>
-                                    <div class="col-12 col-lg-12 col-xl-6">
-                                        <div class="progress" style="height: 22px;">
-                                        {% if x.type == "order_done" and x.status == 'success'  %}
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        {% elif x.type == "order_processing" and x.status == 'success'  %}
-                                                     <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    
-                                        
-                                        {% elif x.type == "order_payment" and x.status == 'success'  %}
-                                            <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        {% elif x.type == "order_checkout" and x.status == 'success'  %}
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                    <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        {% elif x.type == "order_draft" and x.status == 'success'  %}
-                                                <div class="progress-bar bg-success border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DRAFT (20%)</div>
-                                                <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">CHECKOUT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PAYMENT (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">PROCESSING (20%)</div>
-                                                    <div class="progress-bar bg-secondary border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-
-                                        {% else %}
-                                            <div class="progress-bar bg-danger border-right" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">DONE (20%)</div>
-                                        
-                                        {% endif %}
-                                            
-                                        </div>
-                                    </div>
-                                   
+                                   <h5>Id #{{x.id}} - Status: {{x.status}} - Message: {{x.message}} - Content: {{x.content}}, - Time: {{x.timestamp}}</h5>
                                 </div>
                             </div>
                         </div>
@@ -288,17 +238,33 @@
 
   <script>
 
-        const orderSocket = new WebSocket(
+        const LoggingSocket = new WebSocket(
          'ws://'
             + "192.168.88.182:8000"
             + '/logging/?authorization=282571fa2626e75a9f4d84f5557d56d35fc22429'
            
         );
-        orderSocket.onmessage = function(e){
+        LoggingSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            console.log(data);
 
-        }
+            var html = `<div class="card crm-project-box m-b-30">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                   <h5>Id #${data.message[0].id} - Status: ${data.message[0].status} - Message: ${data.message[0].message}- Content: ${data.message[0].content}, - Time: ${data.timestamp}</h5>
+                                </div>
+                            </div>
+                        </div>`;
+
+
+            console.log(data.timestamp);
+            if (data.message[0].type == 'realtime_logging') {
+                $('.log').prepend(html);
+                
+                
+
+            }
+            
+        };
 
        
    </script>

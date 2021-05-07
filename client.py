@@ -16,9 +16,15 @@ order = {'type': 'order_draft',
 {'order_id': "23", 'status': 'success', 'status_message': '#79 üçün draft yaradıldı', 'description': '', 'payment_status': 0, 'payment_method': 2, 'user_id': 21, 'merchant_id': 1,"point":1}]
 }
 
+
+logging = {'type': 'realtime_logging', 
+'data':[ 
+{"status":"test","message":"test","content":"text"}]
+}
+
 while i < 1:
     
-    ws.send(json.dumps(order))
+    ws.send(json.dumps(logging))
     i += 1
     
 ws.recv()

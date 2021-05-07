@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from asgiref.sync import sync_to_async
 from tortoise import Tortoise
 from django.conf import settings
-from .tortoise_models import Order,Payment
+from .tortoise_models import Order,Payment, Logging
 from tortoise.query_utils import Q
 
 
@@ -16,7 +16,15 @@ async def order(request):
         "order":all_orders
     }
     await Tortoise.close_connections()
-    return render (request,'order.html',context)
+    return render (request,'order2.html',context)
+
+
+async def logging(request):
+    await Tortoise.init(**settings.TORTOISE_INIT)
+    all_loggings = await Logging.all().order_by('-id').values("id",'content','message','status','type','timestamp')
+    await Tortoise.close_connections()
+    return render(request,'logging.html',{'obj':all_loggings})
+
 
 
 async def order_detail(request,order_id):

@@ -4,11 +4,25 @@ from django.contrib.auth.models import User
 from channels.db import database_sync_to_async
 from .core.order import OrderProcessing
 from .core.payment import PaymentProcessing
+from .core.logging import LoggingProcessing
+from django.core.serializers.json import DjangoJSONEncoder
+from datetime import date, datetime
+
+
+
 
 class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
     
     payment = PaymentProcessing()
     order = OrderProcessing()
+    logging = LoggingProcessing()
+
+    async def json_serial(self,obj):
+
+        if isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        raise TypeError ("Type %s not serializable" % type(obj))
+
 
     async def connect(self):
         
@@ -32,8 +46,9 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
     
     async def parse_data(self,data):
         data_type = data['type'].split('_')
-        
-        if "checkout" or 'draft' in data_type[1]:
+        print(data_type[1])
+        if "checkout" == data_type[1]:
+            print("231")
             send = await self.order.order_service(**data)
             if send[1] == True:
                 new_data = await send[0].get_or_none(id=send[0].id).values('order_id','id','user_id','type','status','payment_status','payment_id','description','merchant_id','point')
@@ -44,8 +59,22 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
                         'message': new_data
                     }
                 )
-        if "payment" in data_type[1]:
-            await self.payment.payment_services(**data)            
+        elif "payment" in data_type[1]:
+            await self.payment.payment_services(**data)
+        elif "logging" in data_type[1]:
+            start_processing = await self.logging.logging_service(**data)
+            time = json.dumps(start_processing.timestamp, indent=4, sort_keys=True, default=str)
+            new_log =  await start_processing.get(id=start_processing.id).values("id","type","message","content","status")
+            await self.channel_layer.group_send(
+                    'managers',
+                    {
+                        'type': 'logging.echo.message',
+                        'message': new_log,
+                        'timestamp': json.dumps(datetime.now().isoformat())
+                    }
+                )
+            
+
         await self.echo_message(data)
        
     

@@ -60,6 +60,21 @@ class Payment(DefaultModel):
         table = 'socket_payment'
     
 
+
+class Logging(Model):
+    type = fields.CharField(max_length=50, null=True)
+    message = fields.CharField(max_length=1000, null=True)
+    content = fields.TextField(null=True)
+    status = fields.CharField(max_length=100, null=True)
+    timestamp = fields.DatetimeField(auto_now_add=True)
+
+    class Meta:
+        table = "socket_logging"
+
+
+
+
+
 # @pre_save(Payment)
 # async def signal_pre_save(sender, instance: Payment, using_db, update_fields) -> None:
 #     channel_layer = get_channel_layer()
