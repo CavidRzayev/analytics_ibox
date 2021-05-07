@@ -11,9 +11,9 @@ payment = {"type":"order_payment","data":[
     "description": "payment_descri1ption"
     }]}
 
-order = {'type': 'order_payment', 
+order = {'type': 'order_draft', 
 'data':[ 
-{'order_id': "1111", 'status': 'success', 'status_message': '#79 üçün draft yaradıldı', 'description': '', 'payment_status': 0, 'payment_method': 2, 'user_id': 21, 'merchant_id': 1,"point":1}]
+{'order_id': "23", 'status': 'success', 'status_message': '#79 üçün draft yaradıldı', 'description': '', 'payment_status': 0, 'payment_method': 2, 'user_id': 21, 'merchant_id': 1,"point":1}]
 }
 
 while i < 1:
