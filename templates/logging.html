@@ -18,7 +18,26 @@
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" type="text/css">
     <!-- End css -->
 </head>
-<body class="vertical-layout">
+<style>
+.table-danger {
+    background-color: rgb(255 0 20 / 51%);
+}
+.table-danger > td {
+    background-color: rgb(212 0 17 / 16%);
+    color: #141d46;
+}
+.table td {
+    color: #000000;
+    vertical-align: middle;
+    border-top: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 0.6rem;
+}
+.table-danger > th {
+    background-color: rgb(212 0 17 / 16%);
+    color: #000000;
+}
+</style>
+<body class="vertical-layout" style="background: #f2f3f76b;">
 
     <div class="infobar-settings-sidebar-overlay"></div>
     <!-- End Infobar Setting Sidebar -->
@@ -33,13 +52,13 @@
                 <div class="vertical-menu-icon"></div>
                 <div class="vertical-menu-detail">
                   <div class="logobar">
-                    <a href="/" class="logo logo-large"><img src="{% static 'assets/images/logo.svg' %}" class="img-fluid" alt="logo"></a>
+                    <a href="{{request.path}}" class="logo logo-large"><img src="{% static 'assets/images/logo.svg' %}" class="img-fluid" alt="logo"></a>
                   </div>
                   <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-crm" role="tabpanel" aria-labelledby="v-pills-crm-tab">
                       <ul class="vertical-menu">
-                        <li><a href="/"><img src="{% static 'assets/images/svg-icon/dashboard.svg' %}" class="img-fluid" alt="dashboard">Order Monitoring</a></li>
-                        <li><a href="/"><img src="{% static 'assets/images/svg-icon/reports.svg' %}" class="img-fluid" alt="projects">Projects</a></li>
+                        <li><a href="{{request.path}}"><img src="{% static 'assets/images/svg-icon/dashboard.svg' %}" class="img-fluid" alt="dashboard">Order Monitoring</a></li>
+                        <li><a href="{{request.path}}"><img src="{% static 'assets/images/svg-icon/reports.svg' %}" class="img-fluid" alt="projects">Projects</a></li>
                       </ul>
                     </div>
                   </div>
@@ -185,36 +204,74 @@
                 <div class="row align-items-center">
                     <div class="col-md-8 col-lg-8">
                         <h4 class="page-title">Order Monitoring</h4>
+                        
                         <div class="breadcrumb-list">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{request.path}}">Home</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Orders</li>
                             </ol>
+                            
                         </div>
                     </div>
                 </div>
+                
             </div>
+           
             <!-- End Breadcrumbbar -->
             <!-- Start Contentbar -->
            
   <div class="contentbar">
 
-  
+   <div class="input-group flex-nowrap">
+  <span class="input-group-text" id="addon-wrapping">@content</span>
+  <form action="" method="GET">
+  <input type="text" name="q" class="form-control" placeholder="..." aria-label="..." aria-describedby="addon-wrapping">
+  </form>
+</div>
 
+<br>
+<hr>
 
                 <!-- Start row -->
                 <div class="row">
+
+                
                      <!-- Start col -->
-                    <div class="log col-lg-12">
+                    <div class="col-lg-12">
+            <table class=" table table-bordered border-primary">
+                    
+                    <thead >
+                        <tr>
+                        <th scope="col">#ID</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">Time</th>
+                        </tr>
+                    </thead >
+                    <tbody class="log">
                         {% for x in obj %}
-                        <div class="card crm-project-box m-b-30">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                   <h5>Id #{{x.id}} - Status: {{x.status}} - Message: {{x.message}} - Content: {{x.content}}, - Time: {{x.timestamp}}</h5>
-                                </div>
-                            </div>
-                        </div>
-                      {% endfor %}
+                        {% if x.status == "error" %}
+                        <tr class="table-danger">
+                        {% elif x.status == "warning" %}
+                        <tr class="table-warning">
+                        {% elif x.status == "success" %}
+                        <tr class="table-success">
+                        {% else %}
+                        <tr class="table-light">
+                        {% endif %}
+                        <th scope="row">{{x.id}}</th>
+                        <td>{{x.status}}</td>
+                        <td>{{x.message}}</td>
+                        <td>{{x.content}}</td>
+                        <td>{{x.timestamp}}</td>
+                        </tr>
+
+                        {% endfor %}
+                        
+                    </tbody>
+                    </table>
+                     
                       
 
                     </div>
@@ -240,25 +297,70 @@
 
         const LoggingSocket = new WebSocket(
          'ws://'
-            + "192.168.88.182:8000"
+            + "monitoring.iboxapp.az"
             + '/logging/?authorization=282571fa2626e75a9f4d84f5557d56d35fc22429'
            
         );
         LoggingSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
 
-            var html = `<div class="card crm-project-box m-b-30">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                   <h5>Id #${data.message[0].id} - Status: ${data.message[0].status} - Message: ${data.message[0].message}- Content: ${data.message[0].content}, - Time: ${data.timestamp}</h5>
-                                </div>
-                            </div>
-                        </div>`;
+            
+
+
+            var html_error = `
+                        <tr class="table-danger">
+                        <th scope="row">${data.message[0].id}</th>
+                        <td>${data.message[0].status}</td>
+                        <td>${data.message[0].message}</td>
+                        <td>${data.message[0].content}</td>
+                        <td>${data.timestamp}</td>
+                        </tr>`;
+             var html_success = `
+                        <tr class="table-success">
+                        <th scope="row">${data.message[0].id}</th>
+                        <td>${data.message[0].status}</td>
+                        <td>${data.message[0].message}</td>
+                        <td>${data.message[0].content}</td>
+                        <td>${data.timestamp}</td>
+                        </tr>`;
+            
+             var html_info = `
+                        <tr class="table-info">
+                        <th scope="row">${data.message[0].id}</th>
+                        <td>${data.message[0].status}</td>
+                        <td>${data.message[0].message}</td>
+                        <td>${data.message[0].content}</td>
+                        <td>${data.timestamp}</td>
+                        </tr>`;
+             var html_warning = `
+                        <tr class="table-warning">
+                        <th scope="row">${data.message[0].id}</th>
+                        <td>${data.message[0].status}</td>
+                        <td>${data.message[0].message}</td>
+                        <td>${data.message[0].content}</td>
+                        <td>${data.timestamp}</td>
+                        </tr>`;
+            
 
 
             console.log(data.timestamp);
-            if (data.message[0].type == 'realtime_logging') {
-                $('.log').prepend(html);
+            if (data.message[0].status == 'error') {
+                $('.log').prepend(html_error);
+                
+                
+
+            } else if (data.message[0].status == 'success') {
+                $('.log').prepend(html_success);
+                
+                
+
+            } else if (data.message[0].status == 'info') {
+                $('.log').prepend(html_info);
+                
+                
+
+            }else if (data.message[0].status == 'warning') {
+                $('.log').prepend(html_warning);
                 
                 
 

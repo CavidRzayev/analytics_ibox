@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from channels.db import database_sync_to_async
 from tortoise import Tortoise
 from django.conf import settings
-from ...tortoise_models import Logging
 from asgiref.sync import sync_to_async
 
 from django.core.serializers.json import DjangoJSONEncoder

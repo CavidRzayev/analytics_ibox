@@ -2,6 +2,7 @@ from tortoise import fields
 from tortoise.models import Model
 
 
+
 class DefaultModel(Model):
     type = fields.CharField(max_length=50, null=True)
     status = fields.CharField(max_length=50, null=True)

@@ -13,7 +13,7 @@ class LoggingProcessing:
         super().__init__(**kwargs)
 
     async def logging_service(self,*args, **kwargs):
-        await Tortoise.init(**settings.TORTOISE_INIT)
+        await Tortoise.init(settings.TORTOISE_INIT)
         await Tortoise.generate_schemas()
         pars_data = await parse_event(**kwargs)
         pars_data['type'] = kwargs['type']

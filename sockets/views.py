@@ -10,25 +10,28 @@ from tortoise.query_utils import Q
 
 
 async def order(request):
-    await Tortoise.init(**settings.TORTOISE_INIT)
-    all_orders = await Order.all().group_by('order_id','created','type').exclude(is_active=False).order_by('-id').values('order_id','id','user_id','type','status','point','payment_status','merchant_id','payment_id','created','is_active')
+    await Tortoise.init(settings.TORTOISE_INIT)
+    all_orders = await Order.all().group_by('id','created','type').exclude(is_active=False).order_by('-id').values('order_id','user_id','type','status','point','payment_status','merchant_id','payment_id','created','is_active')
     context = {
         "order":all_orders
     }
     await Tortoise.close_connections()
-    return render (request,'order2.html',context)
+    return render (request,'order.html',context)
 
 
 async def logging(request):
-    await Tortoise.init(**settings.TORTOISE_INIT)
+    await Tortoise.init(settings.TORTOISE_INIT)
     all_loggings = await Logging.all().order_by('-id').values("id",'content','message','status','type','timestamp')
+    q = request.GET.get('q')
+    if q:
+        all_loggings = await Logging.filter(content__icontains=q).order_by('-id').values("id",'content','message','status','type','timestamp')
     await Tortoise.close_connections()
     return render(request,'logging.html',{'obj':all_loggings})
 
 
 
 async def order_detail(request,order_id):
-    await Tortoise.init(**settings.TORTOISE_INIT)
+    await Tortoise.init(settings.TORTOISE_INIT)
     order = await Order.filter(order_id=order_id).first()
     order_draft = await Order.get_or_none(order_id=order_id).filter(type='order_draft').distinct()
     order_checkout = await Order.get_or_none(order_id=order_id).filter(type='order_checkout').distinct()

@@ -24,7 +24,7 @@ class PaymentProcessing():
 
     
     async def payment_services(self,**kwargs):
-        await Tortoise.init(**settings.TORTOISE_INIT)
+        await Tortoise.init(settings.TORTOISE_INIT)
         await Tortoise.generate_schemas()
         pars_data = await parse_event(**kwargs)
         order = await get_order(pars_data['order_id'])

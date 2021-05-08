@@ -21,14 +21,14 @@ class UserFlowConsumers(AsyncJsonWebsocketConsumer):
         super().__init__(*args, **kwargs)
     
     async def connect(self):
-        if self.scope['user'].is_manager:
-            self.group_name = "managers"
-            await self.channel_layer.group_add(
-                self.group_name,
-                self.channel_name)
+        # if self.scope['user'].is_manager:
+        self.group_name = "managers"
+        await self.channel_layer.group_add(
+            self.group_name,
+            self.channel_name)
         await self.accept()
 
-    async def new_create_echo_message(self, event):
+    async def create_echo_message(self, event):
         await self.send_json(event)
 
 

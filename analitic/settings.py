@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -84,8 +83,12 @@ ASGI_APPLICATION = "analitic.routing.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tortoise_db',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -155,41 +158,24 @@ REST_FRAMEWORK = {
     ),
 }
 
+
+DATABASE_URI = "postgres://myprojectuser:password@localhost:5432/tortoise_db"
+
+
+
 TORTOISE_INIT = {
-    "db_url": "sqlite://db.sqlite3.tortoise",
-    "modules" : {
-        "models": ["sockets.tortoise_models"]
-     }
+    "connections": {"default": DATABASE_URI},
+    "apps": {
+        "models": {
+            "models": ["sockets.tortoise_models","aerich.models"],
+            "default_connection": "default",
+        }
+    },
 }
 # TORTOISE_INIT = {
-#     "db_url": "postgres://localhost:5432/myproject",
+#     "db_url": DATABASE_URI,
 #     "modules" : {
-#         "models": ["sockets.tortoise_models"]
+#         "models": ["sockets.tortoise_models",]
 #      }
 # }
 
-# TORTOISE_INIT = {
-#         "connections": {
-#             "default": {
-#                 "engine": "tortoise.backends.asyncpg",
-#                 "credentials": {
-#                     "database": "myproject",
-#                     "host": "127.0.0.1",
-#                     "password": "password",
-#                     "port": 5432,
-#                     "user": "myprojectuser",
-#                     "max_size":200,
-#                     "min_size":1,
-#                     "max_inactive_connection_lifetime":1.0,
-#                     # "ssl": ctx  # 
-#                 },
-                
-#             },
-#         },
-#         "apps": {
-#             "models": {
-#                 "models": ["sockets.tortoise_models"],
-#                 "default_connection": "default",
-#             }
-#         },
-#     }

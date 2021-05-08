@@ -29,6 +29,7 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
         await self.accept()
     
     async def echo_message(self, event):
+        
         await self.send_json(event)
     
     async def disconnect(self,code):
@@ -43,22 +44,28 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
             await self.parse_data({
                 'error': "Authorization error"
             })
-    
+
+    async def order_type_check_data(self,*args, **kwargs):
+        send = await self.order.order_service(**kwargs)
+        if send[1] == True:
+            new_data = await send[0].get_or_none(id=send[0].id).values('order_id','id','user_id','type','status','payment_status','payment_id','description','merchant_id','point','courier_id')
+            await self.channel_layer.group_send(
+                'managers',
+                {
+                    'type': 'create.echo.message',
+                    'message': new_data
+                }
+            )
+
+
     async def parse_data(self,data):
         data_type = data['type'].split('_')
-        print(data_type[1])
         if "checkout" == data_type[1]:
-            print("231")
-            send = await self.order.order_service(**data)
-            if send[1] == True:
-                new_data = await send[0].get_or_none(id=send[0].id).values('order_id','id','user_id','type','status','payment_status','payment_id','description','merchant_id','point')
-                await self.channel_layer.group_send(
-                    'managers',
-                    {
-                        'type': 'new.create.echo.message',
-                        'message': new_data
-                    }
-                )
+            await self.order_type_check_data(**data)
+        
+        elif "draft" == data_type[1]:
+            await self.order_type_check_data(**data)
+        
         elif "payment" in data_type[1]:
             await self.payment.payment_services(**data)
         elif "logging" in data_type[1]:
