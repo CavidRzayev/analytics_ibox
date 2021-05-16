@@ -36,6 +36,12 @@
     background-color: rgb(212 0 17 / 16%);
     color: #000000;
 }
+.vertical-menu > li > a {
+    padding: 8px 8px;
+    display: block;
+    color: #141d46;
+    font-size: 16px;
+}
 </style>
 <body class="vertical-layout" style="background: #f2f3f76b;">
 
@@ -57,7 +63,7 @@
                   <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-crm" role="tabpanel" aria-labelledby="v-pills-crm-tab">
                       <ul class="vertical-menu">
-                        <li><a href="{% url 'order' %}"><img src="{% static 'assets/images/svg-icon/dashboard.svg' %}" class="img-fluid" alt="dashboard">Order Monitorinsg</a></li>
+                        <li><a href="{% url 'order' %}"><img src="{% static 'assets/images/svg-icon/dashboard.svg' %}" class="img-fluid" alt="dashboard">Order Monitoring</a></li>
                         <li><a href="{% url 'logging' %}"><img src="{% static 'assets/images/svg-icon/reports.svg' %}" class="img-fluid" alt="projects">Log Monitoring</a></li>
                         <li><a href="{% url 'logging_payment' %}"><img src="{% static 'assets/images/svg-icon/reports.svg' %}" class="img-fluid" alt="projects">Payment Monitoring</a></li>
                       </ul>
