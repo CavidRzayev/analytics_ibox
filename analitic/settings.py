@@ -84,7 +84,7 @@ ASGI_APPLICATION = "analitic.routing.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tortoise_db',
+        'NAME': 'myproject',
         'USER': 'myprojectuser',
         'PASSWORD': 'password',
         'HOST': 'localhost',
@@ -159,7 +159,7 @@ REST_FRAMEWORK = {
 }
 
 
-DATABASE_URI = "postgres://myprojectuser:password@localhost:5432/tortoise_db"
+DATABASE_URI = "postgres://myprojectuser:password@localhost:5432/myproject"
 
 
 
