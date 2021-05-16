@@ -23,6 +23,9 @@ class LoggingFlowConsumers(AsyncJsonWebsocketConsumer):
 
     async def logging_echo_message(self, event):
         await self.send_json(event)
+    
+    async def logging_payment_echo_message(self, event):
+        await self.send_json(event)
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)

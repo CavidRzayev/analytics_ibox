@@ -5,6 +5,7 @@ from channels.db import database_sync_to_async
 from .core.order import OrderProcessing
 from .core.payment import PaymentProcessing
 from .core.logging import LoggingProcessing
+from .core.integration import IntegrationProcessing
 from django.core.serializers.json import DjangoJSONEncoder
 from datetime import date, datetime
 
@@ -16,6 +17,7 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
     payment = PaymentProcessing()
     order = OrderProcessing()
     logging = LoggingProcessing()
+    integration = IntegrationProcessing()
 
     async def json_serial(self,obj):
 
@@ -57,34 +59,53 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
                 }
             )
 
+    async def logging_type_check_data(self, payment=False,*args, **kwargs):
+        start_processing = await self.logging.logging_service(**kwargs)
+        time = json.dumps(start_processing.timestamp, indent=4, sort_keys=True, default=str)
+        new_log =  await start_processing.get(id=start_processing.id).values("id","type","message","content","status")
+        await self.channel_layer.group_send(
+                    'managers',
+                    {
+                        'type': 'logging.echo.message',
+                        'message': new_log,
+                        'timestamp': json.dumps(datetime.now().isoformat()),
+                        'payment_status':payment
+                    }
+                )
+        
+    
+    async def integration_type_check_data(self, payment=False,*args, **kwargs):
+        start_processing = await self.integration.integration_service(**data)
+        time = json.dumps(start_processing.timestamp, indent=4, sort_keys=True, default=str)
+        new_log =  await start_processing.get(id=start_processing.id).values("id","type","message","content","status")
+        await self.channel_layer.group_send(
+                    'managers',
+                    {
+                        'type': 'integration.echo.message',
+                        'message': new_log,
+                        'timestamp': json.dumps(datetime.now().isoformat()),
+                    }
+                )
+        
+
+
 
     async def parse_data(self,data):
         data_type = data['type'].split('_')
         if "checkout" == data_type[1]:
             await self.order_type_check_data(**data)
-        
         elif "draft" == data_type[1]:
             await self.order_type_check_data(**data)
         
-        elif "payment" in data_type[1]:
-            await self.payment.payment_services(**data)
+        # elif "payment" in data_type[1]:
+        #     await self.payment.payment_services(**data)
         elif "logging" in data_type[1]:
-            start_processing = await self.logging.logging_service(**data)
-            time = json.dumps(start_processing.timestamp, indent=4, sort_keys=True, default=str)
-            new_log =  await start_processing.get(id=start_processing.id).values("id","type","message","content","status")
-            await self.channel_layer.group_send(
-                    'managers',
-                    {
-                        'type': 'logging.echo.message',
-                        'message': new_log,
-                        'timestamp': json.dumps(datetime.now().isoformat())
-                    }
-                )
-            
-
+            await self.logging_type_check_data(**data)
+        elif "payment" in data_type[1]:
+            data['payment'] = True
+            await self.logging_type_check_data(**data)
+        elif "integration" in data_type[1]:
+            await self.integration_type_check_data(**data)
         await self.echo_message(data)
        
     
-    
-
-        

@@ -1,7 +1,7 @@
 from websocket import create_connection
 import json
-ws = create_connection("ws://192.168.88.182:8000/analytics/?authorization=a7ca9e4292d457b452525471b5ff8c63e7e609be")
-# ws = create_connection("ws://167.86.115.50:8000/analytics/?authorization=b1b82511632d423c4f0ad6218546d26add873afa")
+#ws = create_connection("ws://192.168.88.182:8000/analytics/?authorization=a7ca9e4292d457b452525471b5ff8c63e7e609be")
+ws = create_connection("ws://monitoring.iboxapp.az/analytics/?authorization=282571fa2626e75a9f4d84f5557d56d35fc22429")
 i = 0
 
 payment = {"type":"order_payment","data":[

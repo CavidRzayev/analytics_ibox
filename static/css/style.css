@@ -153,20 +153,20 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 0;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #3e8b69;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: transparent;
+  background: white;
 }
 
-::-webkit-scrollbar-thumb:hover {
+/* ::-webkit-scrollbar-thumb:hover {
   background: transparent;
-}
+} */
 
 .vertical-menu-detail {
   border-right: 1px solid rgba(0, 0, 0, 0.03);
@@ -277,7 +277,7 @@ code {
     display:none;
 }
 .editable.show{
-    display: table-row;!important;
+    display: table-row!important;
 }
 .columns-form{
     justify-content: space-between;
