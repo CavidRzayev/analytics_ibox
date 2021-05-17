@@ -29,11 +29,11 @@ def logins(request):
         if user is not None:
             login(request,user)
             create_token = Token.objects.get_or_create(user=user)
-            return HttpResponseRedirect('order')
+            return redirect('order')
         else:
-            return HttpResponseRedirect('login')
+            return redirect('login')
     if request.user.is_authenticated:
-        return HttpResponseRedirect('order')
+        return redirect('order')
     return render(request,'login.html')
 
 @database_sync_to_async
@@ -62,7 +62,7 @@ async def order(request):
        await Tortoise.close_connections()
        return render (request,'order.html',context)
     else:
-        return HttpResponseRedirect('login')
+        return redirect('login')
 
 
 async def logging(request):
@@ -73,13 +73,17 @@ async def logging(request):
         q = request.GET.get('q')
         if q:
             all_loggings = await Logging.filter(content__icontains=q).order_by('-id').values("id",'content','message','status','type','timestamp')
-        paginator = Paginator(all_loggings, 500)
+        d = request.GET.get('delete')
+        if d == "True":
+            data = await Logging.all().delete()
+
+        paginator = Paginator(all_loggings, 150)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         await Tortoise.close_connections()
         return render(request,'logging.html',{'obj':page_obj,"user":user[2],"token":user[1]})
     else:
-       return HttpResponseRedirect('login')
+       return redirect('login')
 
 
 async def order_detail(request,order_id):
@@ -101,7 +105,7 @@ async def order_detail(request,order_id):
         await Tortoise.close_connections()
         return render (request,'order_detail.html',context)
     else:
-        return HttpResponseRedirect('login')
+        return redirect('login')
 
 async def logging_payment(request):
     await Tortoise.init(settings.TORTOISE_INIT)
@@ -117,5 +121,5 @@ async def logging_payment(request):
         await Tortoise.close_connections()
         return render(request,'logging_payment.html',{'obj':page_obj,"token":user[1],"user":user[2]})
     else:
-        return HttpResponseRedirect('login')
+        return redirect('login')
 
