@@ -1,7 +1,7 @@
 from websocket import create_connection
 import json
 #ws = create_connection("ws://192.168.88.182:8000/analytics/?authorization=a7ca9e4292d457b452525471b5ff8c63e7e609be")
-ws = create_connection("ws://monitoring.iboxapp.az/analytics/?authorization=282571fa2626e75a9f4d84f5557d56d35fc22429")
+ws = create_connection("ws://134.209.250.172:8000/analytics/?authorization=47174b9ff677f9e5bf97f74de5940fab670117d1")
 i = 0
 
 payment = {"type":"order_payment","data":[
@@ -22,7 +22,7 @@ logging = {'type': 'realtime_logging',
 {"status":"error","message":"test","content":'[{"id":1412,"name":"Test"},{"id":13,"order_id":"141"}]'}]
 }
 
-while i < 1:
+while i < 10:
     
     
     ws.send(json.dumps(logging))
@@ -30,6 +30,6 @@ while i < 1:
     i += 1
     # ws.send(json.dumps(order))
     
-ws.recv()
+#ws.recv()
 
 ws.close()

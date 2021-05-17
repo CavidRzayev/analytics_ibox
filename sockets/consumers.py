@@ -9,7 +9,7 @@ from .core.integration import IntegrationProcessing
 from django.core.serializers.json import DjangoJSONEncoder
 from datetime import date, datetime
 
-
+from channels.exceptions import StopConsumer
 
 
 class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
@@ -25,6 +25,14 @@ class AnalyticsConsumers(AsyncJsonWebsocketConsumer):
             return obj.isoformat()
         raise TypeError ("Type %s not serializable" % type(obj))
 
+
+    #async def websocket_disconnect(self, event):
+    # Leave room group
+        #await self.channel_layer.group_discard(
+            #self.room_name,
+         #   self.channel_name
+        #)
+        #raise StopConsumer()
 
     async def connect(self):
         

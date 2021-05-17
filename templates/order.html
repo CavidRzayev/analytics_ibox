@@ -1,6 +1,21 @@
 {% include 'sidebar.html'%}
 {% load static %}
+ <div class="breadcrumbbar">
+                <div class="row align-items-center">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Order Monitoring</h4>
 
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{request.path}}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                            </ol>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
   <div class="contentbar">
 
   
@@ -94,7 +109,7 @@
         const orderSocket = new WebSocket(
          'ws://'
             + window.location.host
-            + '/userflow/?authorization=282571fa2626e75a9f4d84f5557d56d35fc22429'
+            + '/userflow/?authorization=47174b9ff677f9e5bf97f74de5940fab670117d1'
            
         );
         orderSocket.onmessage = function(e){

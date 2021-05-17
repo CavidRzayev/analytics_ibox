@@ -28,7 +28,7 @@ async def logging(request):
     
     if q:
         all_loggings = await Logging.filter(content__icontains=q).order_by('-id').values("id",'content','message','status','type','timestamp')
-    paginator = Paginator(all_loggings, 100)
+    paginator = Paginator(all_loggings, 500)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     await Tortoise.close_connections()

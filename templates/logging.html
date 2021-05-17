@@ -1,5 +1,7 @@
 {% include 'sidebar.html'%}
 {% load static %}
+{% load cache %}
+
  <div class="breadcrumbbar">
                 <div class="row align-items-center">
                     <div class="col-md-8 col-lg-8">
@@ -48,6 +50,7 @@
                         </tr>
                     </thead >
                     <tbody class="log">
+
                         {% for x in obj %}
                         {% if x.status == "error" %}
                         <tr class="table-danger">

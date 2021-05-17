@@ -8,7 +8,7 @@
                         <div class="breadcrumb-list">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{request.path}}">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Manitoring</li>
+                                <li class="breadcrumb-item active" aria-current="page">Monitoring</li>
                             </ol>
                             
                         </div>
@@ -113,7 +113,7 @@
         const LoggingSocket = new WebSocket(
          'ws://'
             + window.location.host
-            + '/logging/?authorization=282571fa2626e75a9f4d84f5557d56d35fc22429'
+            + '/logging/?authorization=47174b9ff677f9e5bf97f74de5940fab670117d1'
            
         );
         LoggingSocket.onmessage = function(e) {
