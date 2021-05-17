@@ -13,6 +13,12 @@ from django.core.paginator import Paginator
 from rest_framework.authtoken.models import Token
 from user.models import User
 from channels.db import database_sync_to_async
+from django.contrib.auth import logout
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
 
 
 def logins(request):
@@ -35,7 +41,7 @@ def get_user(*args,**kwargs):
     try:
         user = User.objects.get(id=args[0].user.id)
         if  user.is_authenticated:
-            return True,user.auth_token
+            return True,user.auth_token,user
         else:
             return False, None
     except:
@@ -50,6 +56,7 @@ async def order(request):
        all_orders = await Order.all().group_by('id','created','type').exclude(is_active=False).order_by('-id').values('order_id','user_id','type','status','point','payment_status','merchant_id','payment_id','created','is_active')
        context = {
             "order":all_orders,
+            "user":user[2],
             "token":user[1],
         }
        await Tortoise.close_connections()
@@ -70,7 +77,7 @@ async def logging(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         await Tortoise.close_connections()
-        return render(request,'logging.html',{'obj':page_obj,"token":user[1]})
+        return render(request,'logging.html',{'obj':page_obj,"user":user[2],"token":user[1]})
     else:
        return HttpResponseRedirect('login')
 
@@ -108,7 +115,7 @@ async def logging_payment(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         await Tortoise.close_connections()
-        return render(request,'logging_payment.html',{'obj':page_obj,"token":user[1]})
+        return render(request,'logging_payment.html',{'obj':page_obj,"token":user[1],"user":user[2]})
     else:
         return HttpResponseRedirect('login')
 
