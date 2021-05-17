@@ -113,7 +113,8 @@
         const LoggingSocket = new WebSocket(
          'ws://'
             + window.location.host
-            + '/logging/?authorization=47174b9ff677f9e5bf97f74de5940fab670117d1'
+            + '/logging/?authorization='
+            + '{{token}}'
            
         );
         LoggingSocket.onmessage = function(e) {
