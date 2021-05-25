@@ -97,10 +97,12 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [("127.0.0.1", 6379)],
-            'capacity': 300
+            "capacity": 1500,
+            "expiry": 10,
         },
     },
 }
+
 ASGI_THREADS = 1000
 
 # Password validation
@@ -125,9 +127,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'az-AZ'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Baku'
 
 USE_I18N = True
 
@@ -179,13 +181,13 @@ TORTOISE_INIT = {
 #      }
 # }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-        "KEY_PREFIX": "logging"
-    }
-}
+#CACHES = {
+ #   "default": {
+  ##      "BACKEND": "django_redis.cache.RedisCache",
+    #    "LOCATION": "redis://127.0.0.1:6379/1",
+     #   "OPTIONS": {
+      #      "CLIENT_CLASS": "django_redis.client.DefaultClient"
+       # },
+        #"KEY_PREFIX": "logging"
+    #}
+#}

@@ -1,6 +1,6 @@
 {% include 'sidebar.html'%}
 {% load static %}
-{% load cache %}
+
 
  <div class="breadcrumbbar">
                 <div class="row align-items-center">
@@ -65,7 +65,7 @@
                         <td>{{x.status}}</td>
                         <td>{{x.message}}</td>
                         <td>{{x.content|linebreaks}}</td>
-                        <td>{{x.timestamp}}</td>
+                        <td>"{{x.timestamp|date:"Y-m-d H:i:s"}}"</td>
                         </tr>
 
                         {% endfor %}

@@ -22,7 +22,7 @@ class UserFlowConsumers(AsyncJsonWebsocketConsumer):
     
     async def connect(self):
         # if self.scope['user'].is_manager:
-        self.group_name = "managers"
+        self.group_name = "orders"
         await self.channel_layer.group_add(
             self.group_name,
             self.channel_name)

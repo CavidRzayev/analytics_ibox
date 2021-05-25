@@ -5,6 +5,7 @@ from channels.db import database_sync_to_async
 from tortoise import Tortoise
 from django.conf import settings
 from asgiref.sync import sync_to_async
+from channels.exceptions import StopConsumer
 
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -29,3 +30,4 @@ class LoggingFlowConsumers(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
+        raise StopConsumer()

@@ -35,7 +35,7 @@
                                         </p>
                                     </div>
                                     <div class="col-12 col-lg-6 col-xl-5">
-                                        <h5>Order #{{x.order_id}} {{x.is_active}}</h5>
+                                        <h5>Order #{{x.order_id}}</h5>
                                        <a href="{% url "order_detail" x.order_id %}"> <p class="font-14">Created at : {{x.created}} | User ID : {{x.user_id}} | Merchant ID : {{x.merchant_id}} | Courier ID: {{x.courier_id|default:"None"}} | Payment ID: {{x.payment_id}} </p> </a>
                                     </div>
                                     <div class="col-12 col-lg-12 col-xl-6">
@@ -129,7 +129,7 @@
                                                 </div>
                                                 <div class="col-12 col-lg-6 col-xl-5">
                                                     <h5>Order #${data.message[0].order_id} {{x.is_active}}</h5>
-                                                <a href="order_detail/${data.message[0].order_id}/"> <p class="font-14">Created at : "None" | User ID : ${data.message[0].user_id} | Merchant ID : ${data.message[0].merchant_id} | Courier ID: ${data.message[0].courier_id} | Payment ID: ${data.message[0].payment_id} </p> </a>
+                                                <a href="${data.message[0].order_id}/"> <p class="font-14">Created at : "None" | User ID : ${data.message[0].user_id} | Merchant ID : ${data.message[0].merchant_id} | Courier ID: ${data.message[0].courier_id} | Payment ID: ${data.message[0].payment_id} </p> </a>
                                                 </div>
                                                 <div class="col-12 col-lg-12 col-xl-6">
                                                     <div class="progress" style="height: 22px;">
@@ -148,7 +148,7 @@
                                     </div>`;
                 $('.order').prepend(html);
                 
-                
+                $(".piety-data-attributes span").peity("donut")
 
 
                 };

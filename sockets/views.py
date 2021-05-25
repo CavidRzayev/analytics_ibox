@@ -54,6 +54,9 @@ async def order(request):
     user =  await get_user(request)
     if  user[0] == True:
        all_orders = await Order.all().group_by('id','created','type').exclude(is_active=False).order_by('-id').values('order_id','user_id','type','status','point','payment_status','merchant_id','payment_id','created','is_active')
+       d = request.GET.get('delete')
+       if d:
+           data = await Order.filter(order_id=d).delete()
        context = {
             "order":all_orders,
             "user":user[2],
